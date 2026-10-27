@@ -13,10 +13,10 @@ return new class extends Migration
             $table->string('title');
             $table->text('description')->nullable();
             $table->string('location')->nullable();
-            $table->dateTime('starts_at');
-            $table->dateTime('ends_at');
-            $table->foreignId('created_by')->nullable()
-                ->constrained('users')->nullOnDelete();
+            $table->date('event_date');
+            $table->time('time_in');
+            $table->time('time_out');
+            $table->string('qr_code_token')->unique();
             $table->timestamps();
         });
     }

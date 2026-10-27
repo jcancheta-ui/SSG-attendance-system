@@ -9,12 +9,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->foreignId('role_id')->nullable()->after('id')
-                ->constrained('roles');
-
-            $table->string('student_id')->nullable()->unique();
-            $table->string('qr_token')->nullable()->unique();
-            $table->boolean('is_active')->default(true);
+            $table->foreignId('role_id')->after('id')->nullable()->constrained('roles')->onDelete('cascade');
+            $table->string('student_id')->after('email')->nullable()->unique();
+            $table->string('qr_token')->after('student_id')->nullable()->unique();
+            $table->boolean('is_active')->after('qr_token')->default(true);
         });
     }
 
@@ -22,14 +20,7 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->dropForeign(['role_id']);
-            $table->dropUnique(['student_id']);
-            $table->dropUnique(['qr_token']);
-            $table->dropColumn([
-                'role_id',
-                'student_id',
-                'qr_token',
-                'is_active'
-            ]);
+            $table->dropColumn(['role_id', 'student_id', 'qr_token', 'is_active']);
         });
     }
 };
